@@ -14,16 +14,19 @@ public class OperatingSystem {
 		while (processQueue.isEmpty() == false) {
 			Process process = processQueue.pop();
 			packOff(process);
-			if (valideTimeExecuteProcess(process)) {
-				Thread.sleep(0);
-			} else {
-				Thread.sleep(timeInProcess);
-			}
+			valideTimeOut(process);
+		}
+	}
+
+	private void valideTimeOut(Process process) throws InterruptedException {
+		if (valideTimeExecuteProcess(process)) {
+			Thread.sleep(0);
+		} else {
+			Thread.sleep(timeInProcess);
 		}
 	}
 
 	private void packOff(Process process) {
-		System.out.println(process.getName() + " " + process.getTime());
 		process.setStatus(StatusEnum.IN_ACTION);
 		process.setTime(timeInProcess/1000);
 	}

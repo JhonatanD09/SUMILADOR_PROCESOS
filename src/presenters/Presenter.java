@@ -2,13 +2,21 @@ package presenters;
 
 import models.OperatingSystem;
 import models.Queue;
+import views.MainFrame;
 import models.Process;
 
 public class Presenter {
 	
+	private MainFrame mainFrame;
 	private OperatingSystem operatingSystem;
 	
 	public Presenter() {
+		initOperatingSystem();
+		this.mainFrame = new MainFrame();
+		mainFrame.setVisible(true);
+	}
+
+	private void initOperatingSystem() {
 		Queue<Process> queue = new Queue<>();
 		fillProcess(queue);
 		operatingSystem = new OperatingSystem(queue);
