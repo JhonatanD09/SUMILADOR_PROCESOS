@@ -2,23 +2,23 @@ package models;
 
 public class OperatingSystem {
 
-	private static final int timeInProcess = 3000;
-	private Queue<Process> processQueue;
+	private static final int timeInProcess = 5000;
+	private Queue<MyProcess> processQueue;
 
-	public OperatingSystem(Queue<Process> processQueue) {
+	public OperatingSystem(Queue<MyProcess> processQueue) {
 		super();
 		this.processQueue = processQueue;
 	}
 
 	public void startSimulation() throws InterruptedException {
 		while (processQueue.isEmpty() == false) {
-			Process process = processQueue.pop();
+			MyProcess process = processQueue.pop();
 			packOff(process);
 			valideTimeOut(process);
 		}
 	}
 
-	private void valideTimeOut(Process process) throws InterruptedException {
+	private void valideTimeOut(MyProcess process) throws InterruptedException {
 		if (valideTimeExecuteProcess(process)) {
 			Thread.sleep(0);
 		} else {
@@ -26,12 +26,12 @@ public class OperatingSystem {
 		}
 	}
 
-	private void packOff(Process process) {
+	private void packOff(MyProcess process) {
 		process.setStatus(StatusEnum.IN_ACTION);
 		process.setTime(timeInProcess/1000);
 	}
 
-	private boolean valideTimeExecuteProcess(Process process) {
+	private boolean valideTimeExecuteProcess(MyProcess process) {
 		if (process.getTime() > 0.0) {
 			process.setStatus(StatusEnum.READY);
 			processQueue.push(process);
@@ -39,5 +39,9 @@ public class OperatingSystem {
 		} else {
 			return true;
 		}
+	}
+	
+	public Queue<MyProcess> getProcessQueue() {
+		return processQueue;
 	}
 }

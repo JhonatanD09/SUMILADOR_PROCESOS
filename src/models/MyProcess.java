@@ -1,12 +1,12 @@
 package models;
 
-public class Process {
+public class MyProcess {
 
 	private String name;
 	private double time;
 	private StatusEnum status;
 
-	public Process(String name, double time) {
+	public MyProcess(String name, double time) {
 		super();
 		this.name = name;
 		this.time = time;

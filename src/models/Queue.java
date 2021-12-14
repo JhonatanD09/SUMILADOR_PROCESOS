@@ -30,5 +30,9 @@ public class Queue<T> {
 	public boolean isEmpty() {
 		return firstNode == null;
 	}
+	
+	public Node<T> getFirstNode() {
+		return firstNode;
+	}
 
 }
