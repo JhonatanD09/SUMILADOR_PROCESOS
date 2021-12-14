@@ -11,20 +11,20 @@ public class Queue<T> {
 	}
 
 	public void push(T data) {
+		Node<T> temp = new Node<T>(data);
 		if (firstNode == null) {
-			firstNode = new Node<T>(data);
-			finishNode = firstNode;
+			firstNode = temp;
+			finishNode= temp;
+		}else {			
+			finishNode.setNext(temp);
+			finishNode = finishNode.getNext();
 		}
-		finishNode.setNext(new Node<T>(data));
 	}
 
 	public T pop() {
-		if (!isEmpty()) {
-			Node<T> tempNode = firstNode;
-			firstNode = firstNode.getNext();
-			return tempNode.getData();
-		}
-		return null;
+		Node<T> tempNode = firstNode;
+		firstNode = firstNode.getNext();
+		return tempNode.getData();
 	}
 
 	public boolean isEmpty() {

@@ -21,8 +21,8 @@ public class Process {
 		return time;
 	}
 
-	public void setTime(double time) {
-		this.time = time;
+	public void setTime(int time ) {
+		this.time-= time;
 	}
 
 	public StatusEnum getStatus() {
