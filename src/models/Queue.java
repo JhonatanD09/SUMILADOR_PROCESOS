@@ -34,5 +34,5 @@ public class Queue<T> {
 	public Node<T> getFirstNode() {
 		return firstNode;
 	}
-
+	
 }
