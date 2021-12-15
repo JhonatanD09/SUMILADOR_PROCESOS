@@ -2,19 +2,41 @@ package models;
 
 import java.util.ArrayList;
 
-public class OperatingSystem {
+
+public class OperatingSystem implements Runnable{
 
 	private static final int timeInProcess = 1000;
 	private Queue<MyProcess> processQueueReady;
 	private ArrayList<MyProcess> processQueueLocked;
 	private ArrayList<MyProcess> processTerminated;
+	private ArrayList<MyProcess> processExpired;
 	private MyProcess processInExecition;
+	private Thread thread;
 
 	public OperatingSystem(Queue<MyProcess> processQueue) {
 		super();
 		this.processQueueReady = processQueue;
 		this.processQueueLocked = new ArrayList<>();
 		this.processTerminated = new ArrayList<>();
+		processExpired = new ArrayList<>();
+		this.thread = new Thread(this);
+	}
+	
+	@Override
+	public void run() {
+		try {
+			startSimulation();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addProcess(String name, double time, String input) {
+		MyProcess  myProcess = new MyProcess(name, time);
+		if(input.equalsIgnoreCase("SI")) {			
+			myProcess.setInput(true);
+		}
+		processQueueReady.push(new MyProcess(name,time));
 	}
 
 	public void startSimulation() throws InterruptedException {
@@ -38,6 +60,7 @@ public class OperatingSystem {
 		} else {
 			Thread.sleep(timeInProcess);
 			process.setStatus(StatusEnum.READY);
+			processExpired.add(process);
 			processQueueReady.push(process);
 		}
 	}
@@ -73,6 +96,13 @@ public class OperatingSystem {
 			processQueueLocked.remove(process);
 		}
 	}
+	
+	public void delete(String name) {
+		Node<MyProcess> temp = processQueueReady.getFirstNode();
+		if (temp.getData().getName().equals(name)) {
+			
+		}
+	}
 
 	private MyProcess searchProcess(String name) {
 		for (MyProcess myProcess : processQueueLocked) {
@@ -87,4 +117,14 @@ public class OperatingSystem {
 	public ArrayList<MyProcess> getProcessTerminated() {
 		return processTerminated;
 	}
+
+	
+	public ArrayList<MyProcess> getProcessExpired() {
+		return processExpired;
+	}
+	public void start() {
+		
+		thread.start();
+	}
 }
+
