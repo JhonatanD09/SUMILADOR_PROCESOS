@@ -4,15 +4,13 @@ public class MyProcess {
 
 	private String name;
 	private double time;
-	private StatusEnum status;
-	private boolean isInput;
+	private boolean locked;
 
-	public MyProcess(String name, double time) {
+	public MyProcess(String name, double time, boolean locked ) {
 		super();
 		this.name = name;
 		this.time = time;
-		this.status = StatusEnum.READY;
-		this.isInput = false;
+		this.locked = locked;
 	}
 
 	public String getName() {
@@ -27,20 +25,12 @@ public class MyProcess {
 		this.time = (this.time-time);
 	}
 
-	public StatusEnum getStatus() {
-		return status;
+	public boolean isLocked() {
+		return locked;
 	}
-
-	public void setStatus(StatusEnum status) {
-		this.status = status;
+		
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
-
-	public boolean isInput() {
-		return isInput;
-	}
-
-	public void setInput(boolean isInput) {
-		this.isInput = isInput;
-	}
-
+	
 }

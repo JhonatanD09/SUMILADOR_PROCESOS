@@ -31,7 +31,8 @@ public class Queue<T> {
 		return firstNode == null;
 	}
 	
-	public Node<T> getFirstNode() {
+
+	public Node<T> peek() {
 		return firstNode;
 	}
 	

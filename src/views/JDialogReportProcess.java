@@ -14,12 +14,15 @@ import javax.swing.table.DefaultTableModel;
 
 import models.MyProcess;
 
-public class JDialogAddProcess extends JDialog{
+public class JDialogReportProcess extends JDialog{
 
+
+	private static final long serialVersionUID = 1L;
+	
 	private String[] head = new String[] {"Nombre del proceso", "Tiempo restante"};
 	private DefaultTableModel proccesDefaultTable;
 	
-	public JDialogAddProcess( String name) {
+	public JDialogReportProcess( String name) {
 		
 		setSize(800, 800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
