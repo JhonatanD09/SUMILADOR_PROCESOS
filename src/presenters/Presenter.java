@@ -24,43 +24,54 @@ public class Presenter implements ActionListener {
 		mainFrame.setVisible(true);
 		Queue<MyProcess> queue = new Queue<>();
 		operatingSystem = new OperatingSystem(queue);
+		operatingSystem.addProcess(new MyProcess("P1", 5, false));
+		operatingSystem.addProcess(new MyProcess("P2", 8, false));
+		operatingSystem.addProcess(new MyProcess("P3", 7, false));
+		operatingSystem.addProcess(new MyProcess("P4", 6, true));
+		try {
+			operatingSystem.startSimulation();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		operatingSystem.showProcess();
 	}
 
 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		switch (Events.valueOf(e.getActionCommand())) {
-		case INIT:
-			try {
-				operatingSystem.startSimulation();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			break;
-		case ADD:
-			mainFrame.showDialogAdd(this);
-			break;
-		case DELETE:
-
-			break;
-		case ACEPT:
-			Object[] tempObjects = mainFrame.dataCreate();
-			System.out.print((boolean)tempObjects[2]);
-			MyProcess myProcess = new MyProcess((String)tempObjects[0],(int)tempObjects[1],(boolean)tempObjects[2]);
-			if (operatingSystem.addProcess(myProcess)) {
-				mainFrame.deleteDialogCreate();
-				mainFrame.clearTable();
-				mainFrame.addProcessReady(operatingSystem.getProcessQueue());
-			}else {
-				JOptionPane.showMessageDialog(mainFrame, "El nombre no esta disponible");
-			}
-			break;
-		case EXPIRED:
-			break;
-		case SEARCH:
-			mainFrame.report(mainFrame.getSelectedReport(),operatingSystem.getReport(mainFrame.getSelectedReport()));
-			break;
-		}
+//		switch (Events.valueOf(e.getActionCommand())) {
+//		case INIT:
+//			try {
+//				operatingSystem.startSimulation();
+//			} catch (InterruptedException e1) {
+//				e1.printStackTrace();
+//			}
+//			operatingSystem.showProcess();
+//			break;
+//		case ADD:
+//			mainFrame.showDialogAdd(this);
+//			break;
+//		case DELETE:
+//
+//			break;
+//		case ACEPT:
+//			Object[] tempObjects = mainFrame.dataCreate();
+//			System.out.print((boolean)tempObjects[2]);
+//			MyProcess myProcess = new MyProcess((String)tempObjects[0],(int)tempObjects[1],(boolean)tempObjects[2]);
+//			if (operatingSystem.addProcess(myProcess)) {
+//				mainFrame.deleteDialogCreate();
+//				mainFrame.clearTable();
+//				mainFrame.addProcessReady(operatingSystem.getProcessQueue());
+//			}else {
+//				JOptionPane.showMessageDialog(mainFrame, "El nombre no esta disponible");
+//			}
+//			break;
+//		case EXPIRED:
+//			break;
+//		case SEARCH:
+//			mainFrame.report(mainFrame.getSelectedReport(),operatingSystem.getReport(mainFrame.getSelectedReport()));
+//			break;
+//		}
 	}
 }

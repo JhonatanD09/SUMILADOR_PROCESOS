@@ -33,4 +33,8 @@ public class MyProcess {
 		this.locked = locked;
 	}
 	
+	@Override
+	public String toString() {
+		return "name: " + name + " time: "+ time + " bloqueo? : " + locked;
+	}
 }

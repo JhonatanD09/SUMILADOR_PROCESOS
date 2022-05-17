@@ -2,33 +2,30 @@ package models;
 
 import java.util.ArrayList;
 
-
 public class OperatingSystem {
 
 	private Queue<MyProcess> processQueueReady;
-	private ArrayList<MyProcess> locked;
+	private ArrayList<MyProcess> readyAndDespachado;
+	private ArrayList<MyProcess> lockedAndWakeUp;
 	private ArrayList<MyProcess> executing;
 	private ArrayList<MyProcess> expired;
 	private ArrayList<MyProcess> processTerminated;
-	private ArrayList<MyProcess> despachados;
 	private MyProcess processInExecition;
 	private Thread thread;
-	private int timeCronometer = 0;
 
 	public OperatingSystem(Queue<MyProcess> processQueue) {
 		super();
 		this.processQueueReady = processQueue;
-		this.locked = new ArrayList<>();
+		this.lockedAndWakeUp = new ArrayList<>();
 		this.processTerminated = new ArrayList<>();
 		executing = new ArrayList<>();
 		expired = new ArrayList<>();
-		despachados = new ArrayList<>();
+		readyAndDespachado = new ArrayList<>();
 	}
-	
 
-	
 	public boolean addProcess(MyProcess myProcess) {
-		if (search(myProcess.getName())==null) {			
+		if (search(myProcess.getName()) == null) {
+			readyAndDespachado.add(new MyProcess(myProcess.getName(), myProcess.getTime(), myProcess.isLocked()));
 			processQueueReady.push(myProcess);
 			return true;
 		}
@@ -37,53 +34,46 @@ public class OperatingSystem {
 
 	private MyProcess search(String name) {
 		Node<MyProcess> temp = processQueueReady.peek();
-		while (temp!=null) {
-			System.out.println(temp.getData().getName()+"  "+ name);
+		while (temp != null) {
+			System.out.println(temp.getData().getName() + "  " + name);
 			if (temp.getData().getName().equals(name)) {
 				return temp.getData();
-			}else {
+			} else {
 				temp = temp.getNext();
 			}
 		}
 		return null;
 	}
-	
-	
+
 	public void startSimulation() throws InterruptedException {
-		while (processQueueReady.isEmpty() == false) {
+		while (!processQueueReady.isEmpty()) {
 			MyProcess process = processQueueReady.peek().getData();
-			despachados.add(process);
-			executing.add(process);
-			if ((process.getTime()-2)>0) {
-				process.setTime(2);
-				expired.add(process);
-				processQueueReady.push(processQueueReady.pop());
-			}else {
-				processTerminated.add(processQueueReady.pop());
-			}
+			valideSystemTimer(process);
 		}
 	}
 
-	
-
-	
-	private void operations(MyProcess process) {
-		if (process.isLocked()==true) {
-			locked.add(process);
-		}else {
-			valideTimeProcess(process);
+	private void valideSystemTimer(MyProcess process) {
+		executing.add(new MyProcess(process.getName(), (process.getTime()-5< 0 ? 0:process.getTime()-5), process.isLocked()));
+		if ((process.getTime() - 5) > 0) {
+			process.setTime(5);
+			valideLocked(process);
+			readyAndDespachado.add(new MyProcess(process.getName(), process.getTime(), process.isLocked()));
+			processQueueReady.push(processQueueReady.pop());
+		} else {
+			MyProcess myProcess = processQueueReady.pop();
+			myProcess.setTime((int)myProcess.getTime());
+			processTerminated.add(myProcess);
 		}
 	}
 
-
-
-	private void valideTimeProcess(MyProcess process) {
-		if(process.getTime()<=0) {
-			processTerminated.add(processQueueReady.pop());
-		}else {				
-			process.setTime(1);
+	private void valideLocked(MyProcess process) {
+		if (process.isLocked()) {
+			lockedAndWakeUp.add(new MyProcess(process.getName(), process.getTime(), process.isLocked()));
+		} else {
+			expired.add(new MyProcess(process.getName(), process.getTime(), process.isLocked()));
 		}
 	}
+
 
 	public Queue<MyProcess> getProcessQueue() {
 		return processQueueReady;
@@ -94,44 +84,51 @@ public class OperatingSystem {
 	}
 
 	public ArrayList<MyProcess> getProcessQueueLocked() {
-		return locked;
+		return lockedAndWakeUp;
 	}
 
 	public void delete(String name) {
 		Node<MyProcess> temp = processQueueReady.peek();
 		if (temp.getData().getName().equals(name)) {
-			
+
 		}
 	}
-
 
 	public ArrayList<MyProcess> getProcessTerminated() {
 		return processTerminated;
 	}
 
-	
-	public void start() { 
+	public void start() {
 		thread.start();
 	}
-
-
-
-	public ArrayList<MyProcess> getReport(String selectedReport) {
-		switch (selectedReport) {
-		case "Procesos bloqueados":
-			return locked;
-		case "Porcesos despachados":
-			return despachados;
-		case "Procesos en ejecucion":
-			return executing;
-		case "Procesos expirados":
-			return expired;
-		case "Terminados":
-			return processTerminated;
-		case "Despachados":
-			return despachados;
-		}
-		return null;
+	
+	public void showProcess() {
+		
+//		System.out.println("-------------Listos---------------");
+//		for (MyProcess myProcess : readyAndDespachado) {
+//			System.out.println(myProcess.toString());
+//		}
+//		System.out.println("-------------Bloqueados---------------");
+//		for (MyProcess myProcess : lockedAndWakeUp) {
+//			System.out.println(myProcess.toString());
+//		}
+//		System.out.println("-------------Ejecucion---------------");
+//		for (MyProcess myProcess : executing) {
+//			System.out.println(myProcess.toString());
+//		}
+//		System.out.println("-------------Expirados---------------");
+//		for (MyProcess myProcess : expired) {
+//			System.out.println(myProcess.toString());
+//		}
+//		System.out.println("-------------Terminados---------------");
+//		for (MyProcess myProcess : processTerminated) {
+//			System.out.println(myProcess.toString());
+//		}
+//		System.out.println("-------------Despertados---------------");
+//		for (MyProcess myProcess : despertados) {
+//			System.out.println(myProcess.toString());
+//		}
 	}
-}
 
+	
+}
